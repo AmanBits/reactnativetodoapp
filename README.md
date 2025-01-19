@@ -4,9 +4,7 @@ A simple and intuitive To-Do List application built with React Native. This app 
 
 ## Features
 
-- **Task Management:** Add, edit, and delete tasks with ease.
-- **Task Status:** Mark tasks as completed or pending.
-- **Local Storage:** Tasks are stored locally on the device, ensuring they persist between app launches.
+- **Task Management:** Add tasks with ease.
 - **User Interface:** Clean and easy-to-use UI with a modern design.
 - **Cross-Platform:** Works seamlessly on both Android and iOS devices.
 
@@ -18,8 +16,7 @@ A simple and intuitive To-Do List application built with React Native. This app 
 
 - **React Native:** A popular framework for building cross-platform mobile applications.
 - **React Navigation:** Used for navigating between screens.
-- **AsyncStorage:** Used for persisting tasks data locally on the device.
-- **Expo (optional):** A set of tools for building and deploying React Native apps.
+
 
 ## Getting Started
 
