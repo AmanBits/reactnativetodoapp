@@ -1,11 +1,12 @@
-import React, {useState} from 'react';
-import {View, Text, TextInput, Button, FlatList} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, TextInput, Button, FlatList, TouchableHighlight,StyleSheet, Modal} from 'react-native';
 
 const App = () => {
   const [tasks, setTask] = useState([]);
-
   const [title,setTitle] =useState("");
   const [description,setDescription]=useState("");
+  const [showModal,setModalVisibility]=useState(false);
+
 
 
   const writeTitle =(title)=>{
@@ -18,13 +19,17 @@ const App = () => {
 
 
   function addTask(){
-   let task={id:tasks.length+1,title:title,description:description};
-   setTask([...tasks,task]);
+   setTask([...tasks,{id:tasks.length+1,title:title,description:description}]);
    setTitle("");
    setDescription("");
+   setModalVisibility(false);
   }
 
-
+const showConfirm = ()=>{
+  setModalVisibility(true);
+}
+ 
+  
   return (
     <View>
       <Text
@@ -62,7 +67,26 @@ const App = () => {
         onChangeText={(desc)=>writeDesc(desc)}
       />
 
-      <Button title="Add" onPress={addTask} />
+      {/* <Button title="Add" onPress={addTask} /> */}
+
+      
+
+      <TouchableHighlight onPress={showConfirm}>
+        <View>
+          <Text style={{textAlign:"center",fontSize:24,fontFamily:"bold",backgroundColor:"green"}}>ADD</Text>
+        </View>
+      </TouchableHighlight>
+
+
+      <Modal transparent={true} visible={showModal} animationType="slide">
+        <View style={styles.modalContentWrapper}>
+          <View style={styles.modalContent}>
+          <Text style={{fontSize:24}}>{title}</Text>
+          <Text style={{fontSize:20,marginBottom:20}}>{description}</Text>
+          <Button title="Confirm" onPress={addTask}></Button>
+          </View>
+        </View>
+      </Modal>
 
       <View>
         <Text
@@ -90,9 +114,35 @@ const App = () => {
              index.toString()
           }
         />
+
+
       </View>
+
+ 
     </View>
   );
 };
+
+
+const styles = StyleSheet.create({
+ modalContentWrapper:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+ },
+ modalContent:{
+    width: 300,
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5, // 
+    borderWidth:3
+ }
+})
 
 export default App;
