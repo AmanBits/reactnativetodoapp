@@ -6,7 +6,7 @@ const App = () => {
   const [title,setTitle] =useState("");
   const [description,setDescription]=useState("");
   const [showModal,setModalVisibility]=useState(false);
-
+  const [showApp,setAppVisiblity]=useState(false);
 
 
   const writeTitle =(title)=>{
@@ -32,6 +32,9 @@ const showConfirm = ()=>{
   
   return (
     <View>
+ 
+      <Button title={showApp ? "Close" : "Start"} onPress={()=> setAppVisiblity(!showApp)} />
+      { showApp ? <View>
       <Text
         style={{
           fontSize: 40,
@@ -118,7 +121,7 @@ const showConfirm = ()=>{
 
       </View>
 
- 
+      </View> : null}
     </View>
   );
 };
