@@ -13,7 +13,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import Task from '../components/Task';
 
-export default function Tasks() {
+export default function Tasks(props) {
   const [tasks, setTasks] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [taskTitle, setTaskTitle] = useState('');
@@ -106,27 +106,6 @@ export default function Tasks() {
     } catch (error) {
       console.log(error);
     }
-
-    // if (taskTitle.length < 0) {
-    //   setShowTaskTitleError(true);
-    //   setTaskTitleErrorMessage('Length of title above 4 letters.');
-    //   return;
-    // }
-    // if (taskTitle.length > 15) {
-    //   setShowTaskTitleError(true);
-    //   setTaskTitleErrorMessage('Length of title below 15 letters.');
-    //   return;
-    // }
-    // if (taskDescription.length < 0) {
-    //   setShowTaskDescriptionError(true);
-    //   settaskDescriptionErrorMessage('Length of title above 17 letters.');
-    //   return;
-    // }
-    // if (taskDescription.length > 15) {
-    //   setShowTaskDescriptionError(true);
-    //   settaskDescriptionErrorMessage('Length of title below 150 letters.');
-    //   return;
-    // }
   };
 
   useEffect(() => {
@@ -141,7 +120,11 @@ export default function Tasks() {
         <FlatList
           data={tasks}
           renderItem={({item}) => (
-            <Pressable onLongPress={() => handleDeleteTaskList(item.id)}>
+            <Pressable
+              onPress={() =>
+                props.navigation.navigate('taskDetails', {taskData: item})
+              }
+              onLongPress={() => handleDeleteTaskList(item.id)}>
               <Task data={item} />
             </Pressable>
           )}
