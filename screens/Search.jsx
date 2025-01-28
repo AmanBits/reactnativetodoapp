@@ -8,7 +8,7 @@ export default function Search() {
   const getItems = async () => {
     try {
       const response = await fetch(
-        `http://192.168.168.105:3000/tasks?title=${search}`,
+        `http://localhost:3000/tasks?title=${search}`,
       );
 
       if (!response.ok) {
