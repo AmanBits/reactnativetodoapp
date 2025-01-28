@@ -9,7 +9,28 @@ export default function Search() {
   const tasks = useSelector(state => state.tasks);
   
 
+<<<<<<< HEAD
   const dispatch = useDispatch();
+=======
+  const getItems = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/tasks?title=${search}`,
+      );
+
+      if (!response.ok) {
+        console.log(response.status);
+        return;
+      }
+
+      let result = await response.json();
+
+      if (result) {
+        setTaskList(result);
+      }
+    } catch (error) {}
+  };
+>>>>>>> 09409e04cb4637e6e868632b06be12c67e7c4239
 
   useEffect(() => {
     dispatch(searchTaskRequest(search));

@@ -46,8 +46,48 @@ export default function Tasks(props) {
   };
 
   const deleteTasks = async () => {
+<<<<<<< HEAD
     dispatch(deleteTaskRequest(deleteTaskList));
     setShowDeleteBtn(false);
+=======
+    try {
+      const deletedRequest = deleteTaskList.map(id => {
+        fetch(`http://localhost:3000/tasks/${id}`, {
+          method: 'DELETE',
+        });
+      });
+
+      const responses = await Promise.all(deleteTaskList);
+
+      const errors = responses.filter(response => !response.ok);
+
+      if (errors.length > 0) {
+        console.log(errors);
+      } else {
+        console.log('Deleted task successfull');
+      }
+
+      setDeleteTaskList([]);
+      getTasks();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getTasks = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/tasks');
+      if (!response.ok) {
+        console.log(response.status);
+        return;
+      }
+
+      let result = await response.json();
+      setTasks(result);
+    } catch (error) {
+      console.log(error);
+    }
+>>>>>>> 09409e04cb4637e6e868632b06be12c67e7c4239
   };
 
   const addTask = async () => {
@@ -57,7 +97,35 @@ export default function Tasks(props) {
       status: false,
     };
 
+<<<<<<< HEAD
     dispatch(createTaskRequest(newItem));
+=======
+    console.log('New Task:', newItem);
+    try {
+      let response = await fetch('http://localhost:3000/tasks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newItem),
+      });
+
+      if (!response.ok) {
+        console.log(response.status);
+      }
+
+      let result = await response.json();
+
+      if (result) {
+        setTaskTitle('');
+        setTaskDescription('');
+        setShowModal(false);
+        getTasks();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+>>>>>>> 09409e04cb4637e6e868632b06be12c67e7c4239
   };
 
   // useEffect(() => {
