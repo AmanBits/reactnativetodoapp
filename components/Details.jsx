@@ -12,7 +12,7 @@ export default function Details(props) {
     const newItem = {title: title, description: description, status: false};
 
     try {
-      const response = await fetch(`http://192.168.168.105:3000/tasks/${id}`, {
+      const response = await fetch(`http://192.168.94.105:3000/tasks/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

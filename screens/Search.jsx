@@ -1,31 +1,18 @@
 import {StyleSheet, Text, TextInput, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {searchTaskRequest} from '../redux/actions/tasksActions';
 
 export default function Search() {
   const [search, setSearch] = useState('');
-  const [taskList, setTaskList] = useState([]);
+  const tasks = useSelector(state => state.tasks);
+  
 
-  const getItems = async () => {
-    try {
-      const response = await fetch(
-        `http://192.168.168.105:3000/tasks?title=${search}`,
-      );
-
-      if (!response.ok) {
-        console.log(response.status);
-        return;
-      }
-
-      let result = await response.json();
-
-      if (result) {
-        setTaskList(result);
-      }
-    } catch (error) {}
-  };
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getItems();
+    dispatch(searchTaskRequest(search));
   }, [search]);
 
   return (
@@ -38,10 +25,10 @@ export default function Search() {
         />
       </View>
       <View>
-        {taskList.length > 0
-          ? taskList.map(item => {
+        {tasks.length > 0
+          ? tasks.map(item => {
               return (
-                <View style={styles.searchItem}>
+                <View style={styles.searchItem} key={item.id}>
                   <Text style={styles.title}>{item.title}</Text>
                   <Text style={styles.description}>{item.description}</Text>
                 </View>

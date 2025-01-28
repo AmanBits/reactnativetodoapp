@@ -10,14 +10,25 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Task from '../components/Task';
+import {useFocusEffect} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  createTaskRequest,
+  deleteTaskRequest,
+  fetchTasksRequest,
+} from '../redux/actions/tasksActions';
 
 export default function Tasks(props) {
-  const [tasks, setTasks] = useState([]);
+  const dispatch = useDispatch();
+  const tasks = useSelector(state => state.tasks);
+
   const [showModal, setShowModal] = useState(false);
   const [taskTitle, setTaskTitle] = useState('');
   const [taskDescription, setTaskDescription] = useState('');
+
+  const [showDeleteBtn, setShowDeleteBtn] = useState(false);
 
   const [showTaskTitleError, setShowTaskTitleError] = useState(false);
   const [showTaskDescriptionError, setShowTaskDescriptionError] =
@@ -27,51 +38,16 @@ export default function Tasks(props) {
   const [taskDescriptionErrorMessage, settaskDescriptionErrorMessage] =
     useState('');
 
-  const [deleteTaskList, setDeleteTaskList] = useState([]);
+  const [deleteTaskList, setDeleteTaskList] = useState('');
 
   const handleDeleteTaskList = id => {
-    console.log(id);
-    setDeleteTaskList([...deleteTaskList, id]);
+    setDeleteTaskList(id);
+    setShowDeleteBtn(true);
   };
 
   const deleteTasks = async () => {
-    try {
-      const deletedRequest = deleteTaskList.map(id => {
-        fetch(`http://192.168.168.105:3000/tasks/${id}`, {
-          method: 'DELETE',
-        });
-      });
-
-      const responses = await Promise.all(deleteTaskList);
-
-      const errors = responses.filter(response => !response.ok);
-
-      if (errors.length > 0) {
-        console.log(errors);
-      } else {
-        console.log('Deleted task successfull');
-      }
-
-      setDeleteTaskList([]);
-      getTasks();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getTasks = async () => {
-    try {
-      const response = await fetch('http://192.168.168.105:3000/tasks');
-      if (!response.ok) {
-        console.log(response.status);
-        return;
-      }
-
-      let result = await response.json();
-      setTasks(result);
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(deleteTaskRequest(deleteTaskList));
+    setShowDeleteBtn(false);
   };
 
   const addTask = async () => {
@@ -81,36 +57,18 @@ export default function Tasks(props) {
       status: false,
     };
 
-    console.log('New Task:', newItem);
-    try {
-      let response = await fetch('http://192.168.168.105:3000/tasks', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newItem),
-      });
-
-      if (!response.ok) {
-        console.log(response.status);
-      }
-
-      let result = await response.json();
-
-      if (result) {
-        setTaskTitle('');
-        setTaskDescription('');
-        setShowModal(false);
-        getTasks();
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(createTaskRequest(newItem));
   };
 
-  useEffect(() => {
-    getTasks();
-  }, []);
+  // useEffect(() => {
+  //   dispatch(fetchTasksRequest());
+  // }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(fetchTasksRequest());
+    }, [dispatch]),
+  );
 
   return (
     <View>
@@ -140,7 +98,7 @@ export default function Tasks(props) {
         <Text style={styles.addBtnTxt}>+</Text>
       </TouchableOpacity>
 
-      {deleteTaskList.length > 0 ? (
+      {showDeleteBtn ? (
         <TouchableOpacity style={styles.deleteBtn} onPress={deleteTasks}>
           <Text style={styles.deleteBtnTxt}>-</Text>
         </TouchableOpacity>
