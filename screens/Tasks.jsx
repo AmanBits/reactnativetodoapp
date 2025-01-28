@@ -37,7 +37,7 @@ export default function Tasks(props) {
   const deleteTasks = async () => {
     try {
       const deletedRequest = deleteTaskList.map(id => {
-        fetch(`http://192.168.168.105:3000/tasks/${id}`, {
+        fetch(`http://localhost:3000/tasks/${id}`, {
           method: 'DELETE',
         });
       });
@@ -61,7 +61,7 @@ export default function Tasks(props) {
 
   const getTasks = async () => {
     try {
-      const response = await fetch('http://192.168.168.105:3000/tasks');
+      const response = await fetch('http://localhost:3000/tasks');
       if (!response.ok) {
         console.log(response.status);
         return;
@@ -83,7 +83,7 @@ export default function Tasks(props) {
 
     console.log('New Task:', newItem);
     try {
-      let response = await fetch('http://192.168.168.105:3000/tasks', {
+      let response = await fetch('http://localhost:3000/tasks', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
